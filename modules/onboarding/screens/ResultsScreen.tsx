@@ -7,16 +7,15 @@ import { AppBar } from '../../../shared/components/AppBar';
 import { Button } from '../../../shared/components/Button';
 import { Leo } from '../../../shared/components/Leo';
 import { StepDots } from '../components/StepDots';
-import { useOnboardingContext } from '../../../shared/context/OnboardingContext';
 
 interface ResultsScreenProps {
   onBack: () => void;
   onNext: () => void;
+  ranking?: LoveCodeKey[];
 }
 
-export function ResultsScreen({ onBack, onNext }: ResultsScreenProps) {
-  const { form } = useOnboardingContext();
-  const ranking: LoveCodeKey[] = form.codeRanking || ['warmth', 'presence', 'words', 'actions', 'gestures'];
+export function ResultsScreen({ onBack, onNext, ranking: rankingProp }: ResultsScreenProps) {
+  const ranking: LoveCodeKey[] = rankingProp ?? ['warmth', 'presence', 'words', 'actions', 'gestures'];
 
   return (
     <View className="flex-1 bg-cream">

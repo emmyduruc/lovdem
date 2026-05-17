@@ -71,7 +71,7 @@ export default function TabsLayout() {
 
       {overlay === 'results' && (
         <FullScreenOverlay onClose={() => setOverlay(null)}>
-          <ResultsScreen onBack={() => setOverlay(null)} onNext={() => setOverlay(null)} />
+          <ResultsScreen onBack={() => setOverlay(null)} onNext={() => setOverlay(null)} ranking={data.me.ranking} />
         </FullScreenOverlay>
       )}
       {overlay === 'meeting' && (
