@@ -17,6 +17,8 @@ const DEFAULT_FORM: OnboardingForm = {
   checkIn: '3x',
   dateFreq: 'biweekly',
   codeRanking: null,
+  partnerConnected: false,
+  partnerFirstName: 'Sam',
 };
 
 export function OnboardingProvider({ children }: { children: React.ReactNode }) {

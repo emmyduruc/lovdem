@@ -35,4 +35,6 @@ export interface OnboardingForm {
   checkIn: string;
   dateFreq: string;
   codeRanking: LoveCodeKey[] | null;
+  partnerConnected: boolean;
+  partnerFirstName: string;
 }

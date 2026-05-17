@@ -100,14 +100,14 @@ export function HomeScreen({ data, setOverlay, onOpenCode, onOpenDates }: HomeSc
         <NextDateCard data={data} onPress={onOpenDates} />
 
         {/* Relationship level + badge — side by side */}
-        <View className="flex-row gap-3">
+        {/* <View className="flex-row gap-3">
           <View style={{ width: CARD_HALF }}>
             <RelationshipLevelCard level={data.relationshipLevel} />
           </View>
           <View style={{ width: CARD_HALF }}>
             <LatestBadgeCard onPress={() => setOverlay('badges')} />
           </View>
-        </View>
+        </View> */}
 
         <MicroActionCard data={data} onDoIt={() => setOverlay('appreciation')} />
         <NextMeetingCard onPress={() => setOverlay('meeting')} />

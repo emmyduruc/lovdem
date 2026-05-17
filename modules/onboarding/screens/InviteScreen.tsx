@@ -82,8 +82,7 @@ export function InviteScreen({ onBack, onNext }: InviteScreenProps) {
         </View>
 
         <View className="mt-7 gap-2">
-          <Button label="Continue setup" onPress={onNext} fullWidth />
-          <Button label="I'll invite them later" onPress={onNext} variant="ghost" fullWidth />
+          <Button label="Continue" onPress={onNext} fullWidth />
         </View>
       </ScrollView>
     </View>

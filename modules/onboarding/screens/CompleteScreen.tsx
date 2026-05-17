@@ -14,6 +14,15 @@ interface CompleteScreenProps {
 export function CompleteScreen({ onEnter }: CompleteScreenProps) {
   const { form } = useOnboardingContext();
   const insets = useSafeAreaInsets();
+  const { partnerConnected, firstName, partnerFirstName } = form;
+
+  const eyebrow = partnerConnected ? "You're connected" : 'Profile complete';
+  const heading = partnerConnected
+    ? `Welcome to your garden,\n${firstName} & ${partnerFirstName}.`
+    : `Welcome to your garden,\n${firstName}.`;
+  const body = partnerConnected
+    ? 'Both profiles are linked. Leo will show up at the right moments — promise.'
+    : "Thanks — you've completed your profile. Your partner hasn't connected yet, but you can proceed. We'll notify you as soon as they join your garden.";
 
   return (
     <View style={[StyleSheet.absoluteFill, { backgroundColor: C.cream, overflow: 'hidden' }]}>
@@ -34,19 +43,19 @@ export function CompleteScreen({ onEnter }: CompleteScreenProps) {
         <Leo size={170} mood="happy" />
 
         <Text className="text-2xs font-semibold tracking-widest uppercase text-jungle-mid">
-          You're connected
+          {eyebrow}
         </Text>
 
         <Text className="text-[34px] font-bold text-ink text-center leading-4xl" style={{ letterSpacing: -0.68 }}>
-          Welcome to your garden,{'\n'}{form.firstName} & Sam.
+          {heading}
         </Text>
 
         <Text className="text-base-plus leading-base text-ink-2 text-center" style={{ maxWidth: 280 }}>
-          Both profiles are linked. Leo will show up at the right moments — promise.
+          {body}
         </Text>
 
         <View className="mt-2 w-full">
-          <Button label="Enter LoveTrack" onPress={onEnter} fullWidth />
+          <Button label="Continue" onPress={onEnter} fullWidth />
         </View>
       </View>
     </View>
