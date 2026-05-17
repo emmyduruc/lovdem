@@ -36,6 +36,12 @@
 
 // Linking API
 - (BOOL)application:(UIApplication *)application openURL:(NSURL *)url options:(NSDictionary<UIApplicationOpenURLOptionsKey,id> *)options {
+// @generated begin @react-native-firebase/auth-openURL - expo prebuild (DO NOT MODIFY) sync-11c57ab508c3e776ab45ad4f3c3cb28310f617ea
+  if (url.host && [url.host caseInsensitiveCompare:@"firebaseauth"] == NSOrderedSame) {
+    // invocations for Firebase Auth are handled elsewhere and should not be forwarded to Expo Router
+    return NO;
+  }
+// @generated end @react-native-firebase/auth-openURL
   return [super application:application openURL:url options:options] || [RCTLinkingManager application:application openURL:url options:options];
 }
 

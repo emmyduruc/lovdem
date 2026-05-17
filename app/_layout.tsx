@@ -13,8 +13,8 @@ import {
   PlusJakartaSans_800ExtraBold,
 } from '@expo-google-fonts/plus-jakarta-sans';
 import * as SplashScreen from 'expo-splash-screen';
-import auth from '@react-native-firebase/auth';
 import { AppProvider } from '../shared/context/AppContext';
+import { authService } from '../shared/services/auth.service';
 import { useNotifications } from '../shared/hooks/useNotifications';
 import { useServices } from '../shared/hooks/useServices';
 
@@ -25,7 +25,7 @@ function NotificationBootstrap() {
 
   useNotifications({
     onTokenReady: async (token) => {
-      const uid = auth().currentUser?.uid;
+      const uid = authService.getCurrentUser()?.uid;
       if (uid) await userService.savePushToken(uid, token);
     },
   });

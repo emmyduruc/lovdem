@@ -1,9 +1,18 @@
-import auth from '@react-native-firebase/auth';
+import {
+  getAuth,
+  signInWithPhoneNumber,
+  onAuthStateChanged,
+  signOut,
+  getIdToken,
+} from '@react-native-firebase/auth';
 import type { FirebaseAuthTypes } from '@react-native-firebase/auth';
+
+// Single auth instance for the app
+const firebaseAuth = getAuth();
 
 export const authService = {
   sendOtp(phoneNumber: string): Promise<FirebaseAuthTypes.ConfirmationResult> {
-    return auth().signInWithPhoneNumber(phoneNumber);
+    return signInWithPhoneNumber(firebaseAuth, phoneNumber);
   },
 
   async verifyOtp(
@@ -16,20 +25,22 @@ export const authService = {
   },
 
   getCurrentUser(): FirebaseAuthTypes.User | null {
-    return auth().currentUser;
+    return firebaseAuth.currentUser;
   },
 
-  getIdToken(): Promise<string | null> {
-    return auth().currentUser?.getIdToken(false) ?? Promise.resolve(null);
+  async getIdToken(): Promise<string | null> {
+    const user = firebaseAuth.currentUser;
+    if (!user) return null;
+    return getIdToken(user, false);
   },
 
   onAuthStateChanged(
     callback: (user: FirebaseAuthTypes.User | null) => void
   ): () => void {
-    return auth().onAuthStateChanged(callback);
+    return onAuthStateChanged(firebaseAuth, callback);
   },
 
   signOut(): Promise<void> {
-    return auth().signOut();
+    return signOut(firebaseAuth);
   },
 };

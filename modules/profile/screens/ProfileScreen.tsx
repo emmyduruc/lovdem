@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, ScrollView } from 'react-native';
+import { View, ScrollView } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { C } from '../../../shared/constants/colors';
 import { AppData } from '../../../shared/types';
@@ -8,12 +8,31 @@ import { HeartSpots } from '../../../shared/components/HeartSpots';
 import { LeafCorner } from '../../../shared/components/LeafCorner';
 import { Avatar } from '../../../shared/components/Avatar';
 import { Button } from '../../../shared/components/Button';
-import { Icon } from '../../../shared/components/Icon';
+import { AppText } from '../../../shared/components/AppText';
 import { SettingsRow } from '../components/SettingsRow';
 
 interface ProfileScreenProps {
   data: AppData;
   onSignOut: () => void;
+}
+
+function SettingsSection({
+  title,
+  children,
+}: {
+  title: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <View className="mt-5">
+      <View className="mb-2 ml-1">
+        <AppText variant="eyebrow">{title}</AppText>
+      </View>
+      <Card padding={0} style={{ overflow: 'hidden' }}>
+        {children}
+      </Card>
+    </View>
+  );
 }
 
 export function ProfileScreen({ data, onSignOut }: ProfileScreenProps) {
@@ -23,64 +42,49 @@ export function ProfileScreen({ data, onSignOut }: ProfileScreenProps) {
   return (
     <ScrollView
       className="flex-1 bg-cream"
-      contentContainerStyle={{ paddingBottom: 130 }}
+      contentContainerStyle={{ paddingHorizontal: 16, paddingBottom: 130 }}
       showsVerticalScrollIndicator={false}
     >
-      <View className="px-4" style={{ paddingTop: insets.top + 14 }}>
-        <Card variant="dark" padding={22}>
+      <View style={{ paddingTop: insets.top + 12 }} className="mb-1">
+        <Card variant="dark" padding={20}>
           <HeartSpots opacity={0.13} color={C.cream} />
           <LeafCorner position="tr" kind={1} size={100} opacity={0.5} />
-          <View className="relative flex-row items-center gap-3.5">
+          <View className="relative flex-row items-center gap-3.5 z-10">
             <Avatar initial={data.me.firstName.charAt(0)} size="lg" />
-            <View className="flex-1">
-              <Text className="text-2xl font-bold text-cream">
+            <View className="flex-1 min-w-0">
+              <AppText variant="subtitle" color={C.cream} style={{ fontSize: 22, letterSpacing: -0.4 }}>
                 {data.me.firstName} Rivers
-              </Text>
-              <Text className="opacity-75 text-cream mt-0.5" style={{ fontSize: 12.5 }}>
+              </AppText>
+              <AppText variant="caption" color="rgba(252, 253, 222, 0.78)" style={{ marginTop: 2 }}>
                 Connected with {data.partner.firstName} · 14 months
-              </Text>
+              </AppText>
             </View>
             <Button label="Edit" variant="olive" size="sm" />
           </View>
         </Card>
       </View>
 
-      <View className="px-4 pt-3.5">
-        <Text className="text-2xs font-semibold tracking-widest uppercase text-jungle-mid mb-2">
-          Rhythm
-        </Text>
-        <Card padding={4}>
-          <SettingsRow icon={<Icon name="bell" size={18} color={C.jungleDeep} />} title="Check-in frequency" value={freqLabel(data.checkIn)} />
-          <SettingsRow icon={<Icon name="cal" size={18} color={C.jungleDeep} />} title="Date frequency" value={freqLabel(data.dateFreq)} />
-          <SettingsRow icon={<Icon name="eyeoff" size={18} color={C.jungleDeep} />} title="Date privacy default" value="On" last />
-        </Card>
-      </View>
+      <SettingsSection title="Rhythm">
+        <SettingsRow iconName="bell" title="Check-in frequency" value={freqLabel(data.checkIn)} />
+        <SettingsRow iconName="cal" title="Date frequency" value={freqLabel(data.dateFreq)} />
+        <SettingsRow iconName="eyeoff" title="Date privacy default" value="On" last />
+      </SettingsSection>
 
-      <View className="px-4 pt-3.5">
-        <Text className="text-2xs font-semibold tracking-widest uppercase text-jungle-mid mb-2">
-          Notifications
-        </Text>
-        <Card padding={4}>
-          <SettingsRow icon={<Icon name="heart" size={18} color={C.jungleDeep} />} title="Partner updated their level" toggle />
-          <SettingsRow icon={<Icon name="clock" size={18} color={C.jungleDeep} />} title="Date reminders" toggle />
-          <SettingsRow icon={<Icon name="msg" size={18} color={C.jungleDeep} />} title="Weekly meeting nudge" toggle />
-          <SettingsRow icon={<Icon name="flame" size={18} color={C.jungleDeep} />} title="Low-level Leo nudge" toggle last />
-        </Card>
-      </View>
+      <SettingsSection title="Notifications">
+        <SettingsRow iconName="heart" title="Partner updated their level" toggle />
+        <SettingsRow iconName="clock" title="Date reminders" toggle />
+        <SettingsRow iconName="msg" title="Weekly meeting nudge" toggle />
+        <SettingsRow iconName="flame" title="Low-level Leo nudge" toggle last />
+      </SettingsSection>
 
-      <View className="px-4 pt-3.5">
-        <Text className="text-2xs font-semibold tracking-widest uppercase text-jungle-mid mb-2">
-          Partner
-        </Text>
-        <Card padding={4}>
-          <SettingsRow icon={<Icon name="user" size={18} color={C.jungleDeep} />} title="Manage partner connection" onPress={() => {}} />
-          <SettingsRow icon={<Icon name="lock" size={18} color={C.jungleDeep} />} title="Privacy & data" onPress={() => {}} />
-          <SettingsRow icon={<Icon name="logout" size={18} color={C.terra} />} title="Sign out" onPress={onSignOut} danger last />
-        </Card>
-      </View>
+      <SettingsSection title="Partner">
+        <SettingsRow iconName="user" title="Manage partner connection" onPress={() => {}} />
+        <SettingsRow iconName="lock" title="Privacy & data" onPress={() => {}} />
+        <SettingsRow iconName="logout" title="Sign out" onPress={onSignOut} danger last />
+      </SettingsSection>
 
-      <View className="h-[130px] items-center justify-end pb-6">
-        <Text className="text-ink-2 text-xs">Love · Grow · Track</Text>
+      <View className="h-[100px] items-center justify-end pb-6">
+        <AppText variant="caption">Love · Grow · Track</AppText>
       </View>
     </ScrollView>
   );
