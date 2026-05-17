@@ -13,11 +13,25 @@ import {
   PlusJakartaSans_800ExtraBold,
 } from '@expo-google-fonts/plus-jakarta-sans';
 import * as SplashScreen from 'expo-splash-screen';
-import { ClerkProvider } from '@clerk/expo';
-import { tokenCache } from '@clerk/expo/token-cache';
+import auth from '@react-native-firebase/auth';
 import { AppProvider } from '../shared/context/AppContext';
+import { useNotifications } from '../shared/hooks/useNotifications';
+import { useServices } from '../shared/hooks/useServices';
 
 SplashScreen.preventAutoHideAsync();
+
+function NotificationBootstrap() {
+  const { user: userService } = useServices();
+
+  useNotifications({
+    onTokenReady: async (token) => {
+      const uid = auth().currentUser?.uid;
+      if (uid) await userService.savePushToken(uid, token);
+    },
+  });
+
+  return null;
+}
 
 export default function RootLayout() {
   const [fontsLoaded] = useFonts({
@@ -35,22 +49,18 @@ export default function RootLayout() {
   if (!fontsLoaded) return null;
 
   return (
-    <ClerkProvider
-      publishableKey={process.env.EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY!}
-      tokenCache={tokenCache}
-    >
-      <GestureHandlerRootView className="flex-1">
-        <SafeAreaProvider>
-          <AppProvider>
-            <Stack screenOptions={{ headerShown: false, animation: 'fade' }}>
-              <Stack.Screen name="index" />
-              <Stack.Screen name="onboarding" />
-              <Stack.Screen name="(tabs)" />
-            </Stack>
-            <StatusBar style="dark" />
-          </AppProvider>
-        </SafeAreaProvider>
-      </GestureHandlerRootView>
-    </ClerkProvider>
+    <GestureHandlerRootView className="flex-1">
+      <SafeAreaProvider>
+        <AppProvider>
+          <NotificationBootstrap />
+          <Stack screenOptions={{ headerShown: false, animation: 'fade' }}>
+            <Stack.Screen name="index" />
+            <Stack.Screen name="onboarding" />
+            <Stack.Screen name="(tabs)" />
+          </Stack>
+          <StatusBar style="dark" />
+        </AppProvider>
+      </SafeAreaProvider>
+    </GestureHandlerRootView>
   );
 }

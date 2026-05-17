@@ -16,6 +16,9 @@ prepare_react_native_project!
 target 'lovdem' do
   use_expo_modules!
 
+  # RNFirebase expects this when using use_frameworks with static linkage.
+  $RNFirebaseAsStaticFramework = true
+
   if ENV['EXPO_USE_COMMUNITY_AUTOLINKING'] == '1'
     config_command = ['node', '-e', "process.argv=['', '', 'config'];require('@react-native-community/cli').run()"];
   else
@@ -45,33 +48,19 @@ target 'lovdem' do
   )
 
   post_install do |installer|
-    # Clerk: Resolve SPM packages synchronously during pod install
-    # This ensures packages are downloaded before the user opens Xcode
-    # We wait until the end of post_install to ensure workspace is fully written
-    at_exit do
-      workspace_path = File.join(__dir__, 'lovdem.xcworkspace')
-      if File.exist?(workspace_path)
-        puts ""
-        puts "📦 [Clerk] Resolving Swift Package dependencies..."
-        puts "   This may take a minute on first run..."
-        # Use backticks to capture output and check exit status
-        output = `xcodebuild -resolvePackageDependencies -workspace "#{workspace_path}" -scheme "lovdem" 2>&1`
-        if $?.success?
-          puts "✅ [Clerk] Swift Package dependencies resolved successfully"
-        else
-          puts "⚠️  [Clerk] SPM resolution output:"
-          puts output.lines.last(10).join
-        end
-        puts ""
-      end
-    end
-
     react_native_post_install(
       installer,
       config[:reactNativePath],
       :mac_catalyst_enabled => false,
       :ccache_enabled => podfile_properties['apple.ccacheEnabled'] == 'true',
     )
+
+    # Xcode 26 + RN 0.76 can otherwise compile some Folly files with an older C++ standard.
+    installer.pods_project.targets.each do |target|
+      target.build_configurations.each do |config|
+        config.build_settings['CLANG_CXX_LANGUAGE_STANDARD'] = 'c++20'
+      end
+    end
 
     # This is necessary for Xcode 14, because it signs resource bundles by default
     # when building for devices.

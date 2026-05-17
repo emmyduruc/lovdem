@@ -34,7 +34,6 @@ export type Database = {
       };
       love_levels: {
         Row: {
-          id: string;
           couple_id: string;
           user_id: string;
           level: number;
@@ -42,6 +41,21 @@ export type Database = {
         };
         Insert: Omit<Database['public']['Tables']['love_levels']['Row'], 'updated_at'>;
         Update: Partial<Database['public']['Tables']['love_levels']['Insert']>;
+      };
+      date_memories: {
+        Row: {
+          id: string;
+          date_id: string;
+          couple_id: string;
+          uploaded_by: string;
+          url: string;
+          storage_path: string;
+          caption: string | null;
+          taken_at: string | null;
+          created_at: string;
+        };
+        Insert: Omit<Database['public']['Tables']['date_memories']['Row'], 'id' | 'created_at'>;
+        Update: Pick<Database['public']['Tables']['date_memories']['Row'], 'caption'>;
       };
     };
     Views: Record<string, never>;
