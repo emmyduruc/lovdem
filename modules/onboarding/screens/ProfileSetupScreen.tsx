@@ -27,7 +27,7 @@ export function ProfileSetupScreen({ onBack, onNext }: ProfileSetupScreenProps) 
       >
         <StepDots count={7} current={1} />
 
-        <View className="mt-7 gap-1">
+        <View className="mt-7 gap-1 flex justify-center items-center">
           <Text className="text-7xl font-bold text-ink" style={{ letterSpacing: -0.6 }}>
             Show up as you.
           </Text>
