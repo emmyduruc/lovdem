@@ -9,16 +9,18 @@ interface AppBarProps {
   onBack?: () => void;
   right?: React.ReactNode;
   dark?: boolean;
+  /** Set false when rendered inside FullScreenOverlay (safe area handled by parent). */
+  safeTop?: boolean;
 }
 
-export function AppBar({ title, onBack, right, dark = false }: AppBarProps) {
+export function AppBar({ title, onBack, right, dark = false, safeTop = true }: AppBarProps) {
   const insets = useSafeAreaInsets();
   const color = dark ? '#ffffff' : C.jungleDeep;
 
   return (
     <View
       className="flex-row items-center justify-between px-4 pb-1.5"
-      style={{ paddingTop: insets.top + 12 }}
+      style={{ paddingTop: safeTop ? insets.top + 12 : 12 }}
     >
       <View className="w-10 h-10 items-center justify-center">
         {onBack && (

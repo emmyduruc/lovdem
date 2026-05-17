@@ -43,13 +43,13 @@ export function PlayScreen({ data }: PlayScreenProps) {
           <HeartSpots opacity={0.10} color="#fff5ef" />
           <LeafCorner position="tr" kind={2} size={110} opacity={0.45} />
           <View className="relative">
-            <Text className="text-2xs font-semibold tracking-widest uppercase" style={{ color: 'rgba(255,255,255,0.7)' }}>
+            <Text className="text-2xs font-semibold tracking-widest uppercase">
               This week's play
             </Text>
-            <Text className="text-4xl font-bold mt-1.5" style={{ color: '#fff5ef' }}>
+            <Text className="text-4xl font-bold mt-1.5">
               How well do you know me?
             </Text>
-            <Text className="opacity-[0.92] mt-1.5" style={{ fontSize: 13.5, color: '#fff5ef' }}>
+            <Text className="opacity-[0.92] mt-1.5" style={{ fontSize: 13.5 }}>
               5 questions, answered privately. Match score revealed at the end.
             </Text>
             <View className="mt-3.5">

@@ -16,8 +16,8 @@ function FullScreenOverlay({ children, onClose }: { children: React.ReactNode; o
   const insets = useSafeAreaInsets();
   return (
     <Modal visible animationType="slide" presentationStyle="fullScreen" onRequestClose={onClose}>
-      <View className="flex-1 bg-cream">
-        <View className="absolute left-3.5 z-[5]" style={{ top: insets.top + 10 }}>
+      <View className="flex-1 bg-cream" style={{ paddingTop: insets.top }}>
+        <View className="flex-row items-center px-3.5" style={{ height: 44 }}>
           <Pressable
             onPress={onClose}
             className="w-10 h-10 rounded-lg items-center justify-center bg-jungle-deep/[0.07]"
@@ -25,9 +25,7 @@ function FullScreenOverlay({ children, onClose }: { children: React.ReactNode; o
             <Icon name="back" size={20} color={C.jungleDeep} />
           </Pressable>
         </View>
-        <View className="absolute left-0 right-0 bottom-0" style={{ top: insets.top + 56 }}>
-          {children}
-        </View>
+        <View className="flex-1">{children}</View>
       </View>
     </Modal>
   );
@@ -71,7 +69,7 @@ export default function TabsLayout() {
 
       {overlay === 'results' && (
         <FullScreenOverlay onClose={() => setOverlay(null)}>
-          <ResultsScreen onBack={() => setOverlay(null)} onNext={() => setOverlay(null)} ranking={data.me.ranking} />
+          <ResultsScreen embedded onBack={() => setOverlay(null)} onNext={() => setOverlay(null)} ranking={data.me.ranking} />
         </FullScreenOverlay>
       )}
       {overlay === 'meeting' && (

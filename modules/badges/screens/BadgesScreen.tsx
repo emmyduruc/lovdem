@@ -1,6 +1,5 @@
 import React from 'react';
 import { View, Text, ScrollView } from 'react-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { C } from '../../../shared/constants/colors';
 import { AppData } from '../../../shared/types';
 import { BadgeTile } from '../components/BadgeTile';
@@ -23,7 +22,6 @@ interface BadgesScreenProps {
 }
 
 export function BadgesScreen({ data }: BadgesScreenProps) {
-  const insets = useSafeAreaInsets();
   const earned = BADGES.filter((b) => b.earned);
   const inProgress = BADGES.filter((b) => !b.earned);
 
@@ -33,7 +31,7 @@ export function BadgesScreen({ data }: BadgesScreenProps) {
       contentContainerStyle={{ paddingBottom: 130 }}
       showsVerticalScrollIndicator={false}
     >
-      <View className="px-4" style={{ paddingTop: insets.top + 14 }}>
+      <View className="px-4 pt-3.5">
         <Text className="text-5xl font-bold text-ink tracking-tight">
           Badges & growth
         </Text>

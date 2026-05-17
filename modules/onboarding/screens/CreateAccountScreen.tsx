@@ -1,12 +1,22 @@
-import React from 'react';
-import { View, Text, ScrollView } from 'react-native';
-import { C } from '../../../shared/constants/colors';
+import { useState } from 'react';
+import { View, ScrollView, Text, ActivityIndicator, Alert } from 'react-native';
+import { z } from 'zod';
 import { AppBar } from '../../../shared/components/AppBar';
-import { Input } from '../../../shared/components/Input';
 import { Button } from '../../../shared/components/Button';
-import { Icon } from '../../../shared/components/Icon';
+import { Input } from '../../../shared/components/Input';
 import { StepDots } from '../components/StepDots';
 import { useOnboardingContext } from '../../../shared/context/OnboardingContext';
+import { authService } from '../../../shared/services/auth.service';
+import { C } from '../../../shared/constants/colors';
+
+const schema = z.object({
+  phone: z
+    .string()
+    .min(1, 'Phone number is required')
+    .regex(/^\+[1-9]\d{7,14}$/, 'Enter your number with country code, e.g. +12025551234'),
+});
+
+type FormErrors = Partial<Record<keyof z.infer<typeof schema>, string>>;
 
 interface CreateAccountScreenProps {
   onBack: () => void;
@@ -14,7 +24,38 @@ interface CreateAccountScreenProps {
 }
 
 export function CreateAccountScreen({ onBack, onNext }: CreateAccountScreenProps) {
-  const { form, updateForm } = useOnboardingContext();
+  const { form, updateForm, setConfirmation } = useOnboardingContext();
+  const [errors, setErrors]   = useState<FormErrors>({});
+  const [loading, setLoading] = useState(false);
+
+  async function handleContinue() {
+    const result = schema.safeParse({ phone: form.phone });
+
+    if (!result.success) {
+      const fieldErrors: FormErrors = {};
+      for (const issue of result.error.issues) {
+        const key = issue.path[0] as keyof FormErrors;
+        fieldErrors[key] = issue.message;
+      }
+      setErrors(fieldErrors);
+      return;
+    }
+
+    setErrors({});
+    setLoading(true);
+
+    try {
+      const confirmation = await authService.sendOtp(result.data.phone);
+      setConfirmation(confirmation);
+      onNext();
+    } catch (err: unknown) {
+      const message =
+        err instanceof Error ? err.message : 'Could not send OTP. Check the number and try again.';
+      Alert.alert('Error', message);
+    } finally {
+      setLoading(false);
+    }
+  }
 
   return (
     <View className="flex-1 bg-cream">
@@ -30,39 +71,38 @@ export function CreateAccountScreen({ onBack, onNext }: CreateAccountScreenProps
           <Text className="text-7xl font-bold text-ink" style={{ letterSpacing: -0.6 }}>
             A safe space for two.
           </Text>
-          <Text className="text-base-plus text-ink-2 mt-2.5" style={{ lineHeight: 14.5 * 1.45 }}>
-            LoveTrack works best with both of you. Let's set up your side first.
+          <Text className="text-base text-ink-2 mt-2.5" style={{ lineHeight: 22 }}>
+            We'll send a one-time code to verify your number. No passwords needed.
           </Text>
         </View>
 
-        <View className="mt-[26px] gap-3.5">
+        <View className="mt-[26px] gap-1">
           <Input
-            label="Full name"
-            value={form.name}
-            onChangeText={(v) => updateForm({ name: v })}
-            placeholder="Jordan Rivers"
+            label="Phone number"
+            value={form.phone}
+            onChangeText={(v) => {
+              updateForm({ phone: v });
+              if (errors.phone) setErrors({});
+            }}
+            placeholder="+1 202 555 1234"
+            keyboardType="phone-pad"
+            autoComplete="tel"
+            autoCorrect={false}
           />
-          <Input
-            label="Email"
-            value={form.email}
-            onChangeText={(v) => updateForm({ email: v })}
-            placeholder="you@hello.com"
-            keyboardType="email-address"
-            autoCapitalize="none"
-          />
-          <Input
-            label="Password"
-            value={form.password}
-            onChangeText={(v) => updateForm({ password: v })}
-            placeholder="••••••••••"
-            secureTextEntry
-          />
+          {errors.phone && (
+            <Text style={{ color: C.terra, fontSize: 12.5, marginTop: 4 }}>
+              {errors.phone}
+            </Text>
+          )}
+          <Text style={{ color: C.muted, fontSize: 12, marginTop: 6 }}>
+            Include your country code (e.g. +1 for US, +44 for UK)
+          </Text>
         </View>
 
         <View className="mt-7 flex-row gap-2 items-start">
-          <View className="w-[22px] h-[22px] rounded-[7px] bg-jungle-deep items-center justify-center flex-shrink-0 mt-px">
-            <Icon name="check" size={14} color={C.cream} />
-          </View>
+          <View
+            className="w-[22px] h-[22px] rounded-[7px] bg-jungle-deep items-center justify-center flex-shrink-0 mt-px"
+          />
           <Text className="text-ink-2 flex-1" style={{ fontSize: 12.5, lineHeight: 18 }}>
             I agree to the <Text className="font-bold text-ink">terms</Text> and{' '}
             <Text className="font-bold text-ink">privacy promise</Text>. My partner's data stays between us.
@@ -70,7 +110,13 @@ export function CreateAccountScreen({ onBack, onNext }: CreateAccountScreenProps
         </View>
 
         <View className="mt-7">
-          <Button label="Continue" onPress={onNext} fullWidth />
+          <Button
+            label={loading ? 'Sending code…' : 'Send code'}
+            onPress={handleContinue}
+            fullWidth
+            disabled={loading}
+            rightIcon={loading ? <ActivityIndicator size="small" color={C.cream} /> : undefined}
+          />
         </View>
       </ScrollView>
     </View>

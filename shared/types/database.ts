@@ -6,56 +6,100 @@ export type Database = {
     Tables: {
       profiles: {
         Row: {
-          id: string;
-          first_name: string;
-          email: string;
-          birthday: string | null;
-          primary_code: string;
-          code_ranking: string[];
-          push_token: string | null;
-          created_at: string;
+          id:           string;
+          phone:        string | null;
+          first_name:   string;
+          avatar_url:   string | null;
+          birthday:     string | null;
+          push_token:   string | null;
+          created_at:   string;
+          updated_at:   string;
         };
-        Insert: Omit<Database['public']['Tables']['profiles']['Row'], 'created_at'>;
-        Update: Partial<Database['public']['Tables']['profiles']['Insert']>;
+        Insert: {
+          id:           string;
+          phone?:       string | null;
+          first_name:   string;
+          avatar_url?:  string | null;
+          birthday?:    string | null;
+          push_token?:  string | null;
+        };
+        Update: {
+          phone?:       string | null;
+          first_name?:  string;
+          avatar_url?:  string | null;
+          birthday?:    string | null;
+          push_token?:  string | null;
+        };
       };
       couples: {
         Row: {
-          id: string;
-          user_a_id: string;
-          user_b_id: string | null;
-          invite_code: string;
-          date_freq: string;
-          check_in: string;
-          relationship_level: string;
-          created_at: string;
+          id:                     string;
+          user_a_id:              string;
+          user_b_id:              string | null;
+          invite_code:            string;
+          invite_expires_at:      string;
+          status:                 string;
+          date_freq:              string;
+          check_in_freq:          string;
+          relationship_level:     string;
+          relationship_start_date: string | null;
+          created_at:             string;
         };
-        Insert: Omit<Database['public']['Tables']['couples']['Row'], 'created_at'>;
-        Update: Partial<Database['public']['Tables']['couples']['Insert']>;
+        Insert: {
+          user_a_id:    string;
+          invite_code:  string;
+          date_freq?:   string;
+          check_in_freq?: string;
+        };
+        Update: {
+          user_b_id?:              string | null;
+          status?:                 string;
+          date_freq?:              string;
+          check_in_freq?:          string;
+          relationship_level?:     string;
+          relationship_start_date?: string | null;
+        };
       };
       love_levels: {
         Row: {
-          couple_id: string;
-          user_id: string;
-          level: number;
+          couple_id:  string;
+          user_id:    string;
+          level:      number;
           updated_at: string;
         };
-        Insert: Omit<Database['public']['Tables']['love_levels']['Row'], 'updated_at'>;
-        Update: Partial<Database['public']['Tables']['love_levels']['Insert']>;
+        Insert: {
+          couple_id: string;
+          user_id:   string;
+          level:     number;
+        };
+        Update: {
+          level?: number;
+        };
       };
       date_memories: {
         Row: {
-          id: string;
-          date_id: string;
-          couple_id: string;
-          uploaded_by: string;
-          url: string;
+          id:           string;
+          date_id:      string;
+          couple_id:    string;
+          uploaded_by:  string;
+          url:          string;
           storage_path: string;
-          caption: string | null;
-          taken_at: string | null;
-          created_at: string;
+          caption:      string | null;
+          taken_at:     string | null;
+          created_at:   string;
         };
-        Insert: Omit<Database['public']['Tables']['date_memories']['Row'], 'id' | 'created_at'>;
-        Update: Pick<Database['public']['Tables']['date_memories']['Row'], 'caption'>;
+        Insert: {
+          date_id:      string;
+          couple_id:    string;
+          uploaded_by:  string;
+          url:          string;
+          storage_path: string;
+          caption?:     string | null;
+          taken_at?:    string | null;
+        };
+        Update: {
+          caption?: string | null;
+        };
       };
     };
     Views: Record<string, never>;

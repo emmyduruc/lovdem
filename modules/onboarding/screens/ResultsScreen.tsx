@@ -12,14 +12,16 @@ interface ResultsScreenProps {
   onBack: () => void;
   onNext: () => void;
   ranking?: LoveCodeKey[];
+  /** When true, parent already applied safe-area inset (e.g. FullScreenOverlay). */
+  embedded?: boolean;
 }
 
-export function ResultsScreen({ onBack, onNext, ranking: rankingProp }: ResultsScreenProps) {
+export function ResultsScreen({ onBack, onNext, ranking: rankingProp, embedded = false }: ResultsScreenProps) {
   const ranking: LoveCodeKey[] = rankingProp ?? ['warmth', 'presence', 'words', 'actions', 'gestures'];
 
   return (
     <View className="flex-1 bg-cream">
-      <AppBar onBack={onBack} title="Your Love Codes" />
+      <AppBar onBack={onBack} title="Your Love Codes" safeTop={!embedded} />
       <ScrollView
         contentContainerStyle={{ padding: 20, paddingTop: 12, paddingBottom: 40 }}
         showsVerticalScrollIndicator={false}

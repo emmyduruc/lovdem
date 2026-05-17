@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { View, Text, ScrollView } from 'react-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { C } from '../../../shared/constants/colors';
 import { AppData } from '../../../shared/types';
 import { Card } from '../../../shared/components/Card';
@@ -24,7 +23,6 @@ interface MeetingsScreenProps {
 
 export function MeetingsScreen({ data }: MeetingsScreenProps) {
   const [confirmed, setConfirmed] = useState(false);
-  const insets = useSafeAreaInsets();
 
   return (
     <ScrollView
@@ -32,7 +30,7 @@ export function MeetingsScreen({ data }: MeetingsScreenProps) {
       contentContainerStyle={{ paddingBottom: 130 }}
       showsVerticalScrollIndicator={false}
     >
-      <View className="px-4" style={{ paddingTop: insets.top + 14 }}>
+      <View className="px-4 pt-3.5">
         <Text className="text-5xl font-bold text-ink tracking-tight">Meetings</Text>
         <Text className="text-base-plus leading-base text-ink-2 mt-1">
           A short, weekly check-in. No surprise topics.

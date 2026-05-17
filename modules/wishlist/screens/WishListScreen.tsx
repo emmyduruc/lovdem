@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { View, Text, ScrollView } from 'react-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { C } from '../../../shared/constants/colors';
 import { AppData } from '../../../shared/types';
 import { SegmentedControl } from '../../../shared/components/SegmentedControl';
@@ -28,7 +27,6 @@ interface WishListScreenProps {
 
 export function WishListScreen({ data }: WishListScreenProps) {
   const [who, setWho] = useState<'partner' | 'me'>('partner');
-  const insets = useSafeAreaInsets();
   const items = WISHLIST_ITEMS[who];
   const isViewingPartner = who === 'partner';
 
@@ -38,7 +36,7 @@ export function WishListScreen({ data }: WishListScreenProps) {
       contentContainerStyle={{ paddingBottom: 130 }}
       showsVerticalScrollIndicator={false}
     >
-      <View className="px-4" style={{ paddingTop: insets.top + 14 }}>
+      <View className="px-4 pt-3.5">
         <Text className="text-5xl font-bold text-ink tracking-tight">Wish list</Text>
         <Text className="text-base-plus leading-base text-ink-2 mt-1">
           Tiny clues, gentle gifts. Mark claimed to keep it a surprise.

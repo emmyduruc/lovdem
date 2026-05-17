@@ -1,4 +1,3 @@
-import React from 'react';
 import { useRouter } from 'expo-router';
 import { CreateAccountScreen } from '../../modules/onboarding/screens/CreateAccountScreen';
 
@@ -7,7 +6,7 @@ export default function AccountRoute() {
   return (
     <CreateAccountScreen
       onBack={() => router.back()}
-      onNext={() => router.push('/onboarding/profile')}
+      onNext={() => router.push('/onboarding/otp')}
     />
   );
 }

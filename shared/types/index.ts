@@ -27,14 +27,13 @@ export type Overlay =
   | 'results';
 
 export interface OnboardingForm {
-  name: string;
-  firstName: string;
-  email: string;
-  password: string;
-  birthday: string;
-  checkIn: string;
-  dateFreq: string;
-  codeRanking: LoveCodeKey[] | null;
+  phone:            string;
+  firstName:        string;
+  birthday:         string;
+  checkIn:          string;
+  dateFreq:         string;
+  codeRanking:      LoveCodeKey[] | null;
+  avatarUri:        string | null;  // local file URI before upload
+  avatarUrl:        string | null;  // remote URL after upload
   partnerConnected: boolean;
-  partnerFirstName: string;
 }

@@ -44,6 +44,28 @@ export function createUserService(db: SupabaseClient<Database>) {
         .eq('id', userId);
       if (error) throw error;
     },
+
+
+    async uploadAvatar(
+      userId: string,
+      path: string,
+      blob: Blob,
+      ext: string
+    ): Promise<{ error: Error | null }> {
+      const mimeTypes: Record<string, string> = {
+        jpg: 'image/jpeg', jpeg: 'image/jpeg',
+        png: 'image/png',  webp: 'image/webp', heic: 'image/heic',
+      };
+      const { error } = await db.storage
+        .from('user')
+        .upload(path, blob, { contentType: mimeTypes[ext] ?? 'image/jpeg', upsert: true });
+      return { error: error ? new Error(error.message) : null };
+    },
+
+    getAvatarUrl(bucket: string, path: string): string {
+      const { data } = db.storage.from(bucket).getPublicUrl(path);
+      return data.publicUrl;
+    },
   };
 }
 
