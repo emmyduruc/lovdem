@@ -1,0 +1,30 @@
+{
+  "expo": {
+    "name": "lovdem",
+    "slug": "lovdem",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/leo-logo.png",
+    "userInterfaceStyle": "light",
+    "scheme": "lovdem",
+    "newArchEnabled": false,
+    "ios": {
+      "supportsTablet": false,
+      "bundleIdentifier": "com.lovdem.app"
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/leo-logo.png",
+        "backgroundColor": "#163828"
+      },
+      "package": "com.lovdem.app"
+    },
+    "plugins": [
+      "expo-router",
+      "expo-font","expo-secure-store", "@clerk/expo"
+    ],
+    "experiments": {
+      "typedRoutes": true
+    }
+  }
+}

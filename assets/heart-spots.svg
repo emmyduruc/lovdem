@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="160" height="160" viewBox="0 0 160 160">
+  <defs>
+    <g id="hspot">
+      <path d="M0,3 C0,-2 -8,-4 -8,2 C-8,7 0,12 0,12 C0,12 8,7 8,2 C8,-4 0,-2 0,3 Z" fill="#fcfdde"></path>
+    </g>
+  </defs>
+  <g opacity="1">
+    <use href="#hspot" transform="translate(20,30) rotate(-12) scale(1.1)"></use>
+    <use href="#hspot" transform="translate(64,18) rotate(18) scale(0.9)"></use>
+    <use href="#hspot" transform="translate(108,40) rotate(-6) scale(1.25)"></use>
+    <use href="#hspot" transform="translate(140,90) rotate(28) scale(1)"></use>
+    <use href="#hspot" transform="translate(40,80) rotate(40) scale(1.15)"></use>
+    <use href="#hspot" transform="translate(86,76) rotate(-22) scale(0.85)"></use>
+    <use href="#hspot" transform="translate(28,120) rotate(8) scale(1)"></use>
+    <use href="#hspot" transform="translate(76,134) rotate(-30) scale(1.2)"></use>
+    <use href="#hspot" transform="translate(124,128) rotate(14) scale(0.95)"></use>
+  </g>
+</svg>
